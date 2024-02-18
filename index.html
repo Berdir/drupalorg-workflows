@@ -1,40 +1,141 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+  <title>Entities explained</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/solarized.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/monokai.css">
+  <style>
+    .smaller {
+      font-size: 30px;
+    }
+    .hljs-comment {
+      color: lightskyblue;
+    }
+    li {
+      margin-bottom: .5rem;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+    <section><h1 class="r-fit-text">Drupal.org Workflows</h1><p><a href="https://berdir.github.io/drupalorg-workflows/">berdir.github.io/drupalorg-workflows/</a></p></section>
+    <section>
+      <h2>About me</h2>
+      <ul>
+        <li>Sascha Grossenbacher</li>
+        <li>MD Systems</li>
+        <li>https://drupal.org/u/berdir</li>
+        <li>Entity system maintainer</li>
+        <li>Contrib maintainer: TMGMT, Paragraphs, Token, Pathauto, Redirect, ...</li>
+        <li>Contributing to Drupal since ~16 years</li>
+      </ul>
+    </section>
+    <section><h2>Topics</h2>
+      <ul>
+        <li>Issues</li>
+        <li>Patches & Merge Requests</li>
+        <li>Using Gitlab CI in contributed modules</li>
+        <li>Release Management</li>
+      </ul>
+    </section>
+    <section>
+      <h2>Disclaimer</h2>
+      <ul>
+        <li>Personal opinions ahead</li>
+        <li>Not all maintainers work in the same way</li>
+      </ul>
+    </section>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+    <section>
+      <section><h2 class="r-fit-text">Issues</h2></section>
+      <section>
+        <img src="images/create_issue.png" alt="Screenshot of create new issue form">
+      </section>
+      <section>
+        <h3>Overview</h3>
+        <ul>
+          <li>Issues use nodes and comments</li>
+          <li>The node holds the issue metadata, updated through comments</li>
+          <li>Mostly used to track code changes, consider using Slack, Forums, Drupal Answers, ... for support</li>
+          <li>Different rules for Drupal core vs. contributed projects</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Title</h3>
+        <ul>
+          <li>Short, compact description of the problem/feature</li>
+          <li>Usually becomes the commit message if issue results in a code change</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Priority</h3>
+        <ul>
+          <li>Only change to Major/Critical according to the rules</li>
+          <li>Importance of the issue to the project, not to you</li>
+          <li><a href="https://www.drupal.org/docs/develop/issues/fields-and-other-parts-of-an-issue/issue-priority-field">d.org/docs/develop/issues/fields-and-other-parts-of-an-issue/issue-priority-field</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Status</h3>
+        <ul>
+          <li>Active: New issue, no work done yet</li>
+          <li>Needs review: Patch/MR ready for review/testing</li>
+          <li>Needs work: Updates needed after testing/reviewing</li>
+          <li>Fixed: Set by maintainer after committing. Automatically changed to Closed (Fixed) after 2 weeks</li>
+          <li><a href="https://www.drupal.org/docs/develop/issues/fields-and-other-parts-of-an-issue/issue-status-field">d.org/docs/develop/issues/fields-and-other-parts-of-an-issue/issue-status-field</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Version</h3>
+        <ul>
+          <li>Always pick the development version/branch</li>
+          <li>Drupal Core: Development in 11.x branch (=main branch), will become 10.3</li>
+          <li>Contrib: Check project page when not sure</li>
+        </ul>
+        <img src="images/development_version.png" alt="The development version can usually be found in the releases section">
+      </section>
+      <section>
+        <h3>Tags</h3>
+        <ul>
+          <li>Only standardized, documented tags should be used</li>
+          <li>Common are for example Needs X, like Needs tests</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Outlook</h3>
+        <ul>
+          <li>Issues will be moved to Gitlab</li>
+        </ul>
+      </section>
+    </section>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+  </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+  // More info about initialization & config:
+  // - https://revealjs.com/initialization/
+  // - https://revealjs.com/config/
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+
+    // Learn about plugins: https://revealjs.com/plugins/
+    plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+  });
+</script>
+</body>
 </html>
