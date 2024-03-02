@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <title>Entities explained</title>
+  <title>Drupal.org Worflows</title>
 
   <link rel="stylesheet" href="dist/reset.css">
   <link rel="stylesheet" href="dist/reveal.css">
@@ -32,7 +32,7 @@
       <h2>About me</h2>
       <ul>
         <li>Sascha Grossenbacher</li>
-        <li>MD Systems</li>
+        <li>MD Systems (We're hiring!)</li>
         <li>https://drupal.org/u/berdir</li>
         <li>Entity system maintainer</li>
         <li>Contrib maintainer: TMGMT, Paragraphs, Token, Pathauto, Redirect, ...</li>
@@ -43,7 +43,7 @@
       <ul>
         <li>Issues</li>
         <li>Patches & Merge Requests</li>
-        <li>Using Gitlab CI in contributed modules</li>
+        <li>Gitlab CI</li>
         <li>Release Management</li>
       </ul>
     </section>
@@ -67,6 +67,7 @@
           <li>The node holds the issue metadata, updated through comments</li>
           <li>Mostly used to track code changes, consider using Slack, Forums, Drupal Answers, ... for support</li>
           <li>Different rules for Drupal core vs. contributed projects</li>
+          <li>Search for existing issues first</li>
         </ul>
       </section>
       <section>
@@ -98,8 +99,17 @@
         <h3>Version</h3>
         <ul>
           <li>Always pick the development version/branch</li>
-          <li>Drupal Core: Development in 11.x branch (=main branch), will become 10.3</li>
           <li>Contrib: Check project page when not sure</li>
+        </ul>
+        <img src="images/development_version.png" alt="The development version can usually be found in the releases section">
+      </section>
+      <section>
+        <h3>Version (Drupal  Core)</h3>
+        <ul>
+          <li>Development in 11.x branch (=main branch)</li>
+          <li>As of a few days ago, 10.3.x now exists as a separate branch</li>
+          <li>Almost every issue should still target 11.x, will first be committed there</li>
+          <li></li>
         </ul>
         <img src="images/development_version.png" alt="The development version can usually be found in the releases section">
       </section>
@@ -108,13 +118,163 @@
         <ul>
           <li>Only standardized, documented tags should be used</li>
           <li>Common are for example Needs X, like Needs tests</li>
+          <li><a href="https://www.drupal.org/node/3156530">drupal.org/node/3156530</a></li>
         </ul>
       </section>
       <section>
-        <h3>Outlook</h3>
+        <h3>Component</h3>
         <ul>
-          <li>Issues will be moved to Gitlab</li>
+          <li>Drupal Core has component maintainers, so picking a matching component is important.</li>
+          <li>Sometimes hard to find a good component, others will improve if necessary</li>
+          <li>Most contrib projects barely use components</li>
         </ul>
+      </section>
+      <section>
+        <h3>Assignee</h3>
+        <ul>
+          <li>Only maintainers can assign someone else than themselves</li>
+          <li>Only assign to you if you are actively working on the issue, unassign when done</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Issue summary</h3>
+        <ul>
+          <li>Use the template as much as possible</li>
+          <li>Most important: Problem/Motivation, Steps to reproduce for a bug and proposed resolution.</li>
+          <li>Updating issue summary of a large issue with many comments is a useful contribution!</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Useful (non-code) contributions</h3>
+        <ul>
+          <li>Reproduce bugs, provide clear steps to reproduce when not provided</li>
+          <li>Update issue summary</li>
+          <li>Finding and reporting duplicates to prevent duplicate work</li>
+          <li>Answer questions</li>
+        </ul>
+      </section>
+      <section>
+        <p>Issues will move to Gitlab</p>
+      </section>
+    </section>
+    <section>
+      <section><h2 class="r-fit-text">Patches & Merge Requests</h2></section>
+      <section>
+        <h3>Patches</h3>
+        <ul>
+          <li>Describe changes to source files</li>
+          <li>Each patch contains full set of changes against the target branch</li>
+          <li>Interdiff (diff between two patches) used to document incremental changes</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Collaboration process with patches</h3>
+        <ul>
+          <li>Patch uploaded as an issue comment</li>
+          <li>Review posted with requested changes</li>
+          <li>Updated patch + interdiff uploaded as a comment</li>
+          <li>Repeat until committed</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Uncommon aspects on drupal.org</h3>
+        <ul>
+          <li>Very common that multiple developers contribute code to a single issue</li>
+          <li>Custom tools like Dreditor</li>
+          <li>Same basic workflow persisted for a very long time, while code versioning changed from CVS to Git to Gitlab</li>
+          <li>High adoption of using patches in website projects (committed, drush make, composer patches)</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Merge Requests (Pull Requests on Github)</h3>
+        <ul>
+          <li>Slow shift to merge requests, soon enforced due to DrupalCI/GitlabCI changes</li>
+          <li>Similar basic process, but more structured</li>
+          <li>Based on a git branch (patch) and commits (interdiff)</li>
+          <li>Standard contribution process for many open source projects</li>
+          <li>Easier to learn for non-Drupal developer and non-developer contributors</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Limitation of Merge requests</h3>
+        <ul>
+          <li>Merge requests commonly assume a single developer/team</li>
+          <li>Non-maintainers initiate process by creating a repository "fork" in their own name.</li>
+          <li>Fork is owned by them, only they are commit</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Merge requests on drupal.org</h3>
+        <ul>
+          <li>Custom process developed for drupal.org: shared issue forks</li>
+          <li>First contributor requests an issue fork. Everyone can gain access, automatically granted</li>
+          <li>Gitlab is working on a similar concept called <a href="https://about.gitlab.com/blog/2023/04/04/gitlab-community-forks/">Community forks</a></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Create issue fork</h3>
+        <img src="images/issue-fork-create.png" alt="Screenshot of Create issue fork UI on a drupal.org issue">
+      </section>
+      <section>
+        <h3>Issue Fork info</h3>
+        <img src="images/issue-fork-info.png" alt="Screenshot of Issue fork info widget">
+      </section>
+      <section>
+        <h3>Issue Fork Commands</h3>
+        <img src="images/issue-fork-commands.png" alt="Screenshot of Issue fork info widget with visible commands">
+      </section>
+      <section>
+        <h3>Using patches in your composer project</h3>
+        <ul>
+          <li><a href="https://github.com/cweagans/composer-patches">https://github.com/cweagans/composer-patches</a></li>
+          <li><code>composer require cweagans/composer-patches</code></li>
+        </ul>
+      </section>
+      <section>
+        <h3>Recommended composer.json settings</h3>
+        <pre><code class="language-json" data-line-numbers="2|3|4-6|7-11|13" data-trim>
+          "extra": {
+            "enable-patching": true,
+            "composer-exit-on-patch-failure": true,
+            "patchLevel": {
+              "drupal/core": "-p2"
+            },
+            "patches": {
+              "drupal/core": {
+                "ISSUE-NR: DESCRIPTION": "PATCH-URL-OR-FILENAME",
+              }
+            }
+            // OR
+            "patches-file": "composer.patches.json",
+          }
+        </code></pre>
+      </section>
+      <section>
+        <h3>Merge requests as patches</h3>
+        <pre><code class="language-bash" data-line-numbers="" data-trim>
+          curl -o patches/PROJECT-ISSUENR-description.patch \
+          https://../merge_requests/5636.diff
+        </code></pre>
+
+        <h4>Important!</h4>
+        <ol>
+          <li>Do <strong>NOT</strong> use MR.diff URL directly. Remote Code Execution!</li>
+          <li>Use .diff, not .patch (patch is a list of commits in a single patch)</li>
+        </ol>
+      </section>
+      <section>
+        <h3>Work on a merge request in your project for a contrib module</h3>
+        <pre><code class="language-bash" data-line-numbers="1|2|3-5|6|7-8" data-trim>
+          composer reinstall drupal/PROJECT --prefer-source
+          cd web/modules/contrib/PROJECT
+          git remote add ...
+          git fetch ...
+          git checkout ...
+          ...
+          git commit && push
+          # Open Merge request (verify target branch), update issue
+        </code></pre>
+
       </section>
     </section>
 
