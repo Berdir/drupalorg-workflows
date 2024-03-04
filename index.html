@@ -111,7 +111,6 @@
           <li>Almost every issue should still target 11.x, will first be committed there</li>
           <li></li>
         </ul>
-        <img src="images/development_version.png" alt="The development version can usually be found in the releases section">
       </section>
       <section>
         <h3>Tags</h3>
@@ -224,6 +223,14 @@
         <img src="images/issue-fork-commands.png" alt="Screenshot of Issue fork info widget with visible commands">
       </section>
       <section>
+        <h3>Merge request UI</h3>
+        <img src="images/merge-request-ui.png" alt="Screenshot of GitlabMerge request UI" >
+      </section>
+      <section>
+        <h3>Merge request Code review</h3>
+        <img src="images/merge-request-changes.png" alt="Screenshot of GitlabMerge request UI with a code review" >
+      </section>
+      <section>
         <h3>Using patches in your composer project</h3>
         <ul>
           <li><a href="https://github.com/cweagans/composer-patches">https://github.com/cweagans/composer-patches</a></li>
@@ -275,6 +282,183 @@
           # Open Merge request (verify target branch), update issue
         </code></pre>
 
+      </section>
+    </section>
+    <section>
+      <section><h2 class="r-fit-text">Drupal CI to Gitlab CI</h2></section>
+      <section>
+        <h3>Drupal CI History</h3>
+        <ul>
+          <li>Several iterations, initially called PIFT (Project Issue File Test), around 2007</li>
+          <li>Modernized around 2014 using Jenkins, Docker Containers to support different PHP and databases versions</li>
+          <li>Limited flexibility</li>
+          <li>Now deprecated, replaced with GitlabCI</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Gitlab CI</h3>
+        <ul>
+          <li>Standard Continuous Integration system of Gitlab</li>
+          <li>Pipeline: A set of jobs</li>
+          <li>Jobs: Set of commands, runs in a container, can use N service containers (MySQL, Redis, ...), dependencies</li>
+          <li>Scalable, runs on Kubernetes</li>
+          <li>Infrastructure provided by Drupal Asssociation, pretty expensive, consider what pipelines are really needed</li>
+        </ul>
+      </section>
+      <section>
+        <p>CORE MR: test only, split</p>
+      </section>
+      <section>
+        <h3>Add and use default template</h3>
+        <img src="images/add-gitlab-ci.png" alt="Screenshot of add .gitlab-ci.yml file UI" >
+      </section>
+      <section>
+        <h3>Default pipeline</h3>
+        <img src="images/default-pipeline.png" alt="Screenshot of default Pipeline UI" >
+        <p><a href="https://git.drupalcode.org/project/gitlab_templates">https://git.drupalcode.org/project/gitlab_templates</a></p>
+      </section>
+      <section>
+        <h3>Investigate fails: Test results</h3>
+        <img src="images/test-results.png" alt="Screenshot of Pipeline Test results" >
+      </section>
+      <section>
+        <h3>Investigate fails: Artifacts</h3>
+        <img src="images/test-artifacts.png" alt="Screenshot of PHPUnit Test Artifacts">
+      </section>
+      <section>
+        <h3>Investigate fails: Artifacts</h3>
+        <img src="images/test-artifacts-html.png" alt="Screenshot of PHPUnit Test Artifacts">
+      </section>
+      <section>
+        <h3>Customize: Concurrent Test runs</h3>
+        <p>Projects with more than a few tests: Use run-tests.sh with concurrency feature</p>
+        <pre><code class="language-yaml" data-trim>
+          variables:
+            _PHPUNIT_CONCURRENT: '1'
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Test different Core and PHP versions</h3>
+        <p>Use only what makes sense for your project</p>
+        <pre><code class="language-yaml" data-trim>
+          variables:
+            OPT_IN_TEST_PREVIOUS_MAJOR: 1
+            OPT_IN_TEST_PREVIOUS_MINOR: 1
+            OPT_IN_TEST_NEXT_MINOR: 1
+            OPT_IN_TEST_NEXT_MAJOR: 1
+            OPT_IN_TEST_MAX_PHP: 1
+        </code></pre>
+        <p>Alternative #1: Scheduled Pipelines</p>
+        <p>Alternative #2: Combine with manual execution</p>
+        <pre><code class="language-yaml" data-trim>
+          when: manual
+        </code></pre>
+      </section>
+      <section>
+        <h3>Scheduled Pipelines</h3>
+        <img src="images/pipeline-schedule.png" alt="Screenshot of Pipeline Schedule Editor">
+      </section>
+      <section>
+        <h3>Customize: Additional services</h3>
+        <p>Redis needs a redis server</p>
+        <pre><code class="language-yaml" data-trim>
+          phpunit:
+            services:
+              - !reference [ .with-database ]
+              - !reference [ .with-chrome ]
+              - name: redis:6
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Composer dependencies and configuration</h3>
+        <p>Everything in composer.json is merged into project composer.json</p>
+        <pre><code class="language-json" data-trim>
+            "name": "drupal/simplesamlphp_auth",
+            "config": {
+                "allow-plugins": {
+                    "simplesamlphp/composer-module-installer": true
+                }
+            }
+        </code></pre>
+        <pre><code class="language-yaml" data-trim>
+          .composer-base:
+            before_script:
+              - composer require --dev predis/predis --no-update
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Additional extensions/packages</h3>
+        <p>Redis needs the redis php extension</p>
+        <pre><code class="language-yaml" data-trim>
+          phpunit:
+            before_script:
+              - pecl install redis && docker-php-ext-enable redis
+        </code></pre>
+        <p>Imagemagick needs extra packages</p>
+        <pre><code class="language-yaml" data-trim>
+            before_script:
+              - sudo apt-get update
+              - sudo apt-get install -y --no-install-recommends imagemagick
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Use your own image</h3>
+        <p>Installing many packages and other system changes are slow. A separate image is faster, but needs to be maintained</p>
+        <pre><code class="language-yaml" data-trim>
+          default:
+            image:
+              name: berdir/php-8.3-apache-extra:production
+        </code></pre>
+        <pre><code class="language-yaml" data-trim>
+          FROM drupalci/php-8.3-apache:production
+          RUN apt-get update && apt-get install -y ...
+          RUN pecl install redis && docker-php-ext-enable redis
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Install JS libraries</h3>
+        <p>DropzoneJS needs the Dropzone JS library</p>
+        <pre><code class="language-yaml" data-trim>
+          variables:
+            DROPZONE_VERSION: v5.9.3
+
+          .composer-base:
+            after_script:
+              - mkdir $_WEB_ROOT/libraries
+              - cd $_WEB_ROOT/libraries
+              - curl -L -o dropzone.zip --silent
+                https://github.com/dropzone/dropzone/releases/download/$DROPZONE_VERSION/dist.zip
+              - unzip dropzone.zip
+              - mv dist dropzone
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Test different version</h3>
+        <p>DropzoneJS also wants to run tests with Dropzone v6</p>
+        <pre><code class="language-yaml" data-trim>
+          composer (dropzone 6):
+            extends: .composer-base
+            variables:
+              DROPZONE_VERSION: v6.0.0-beta.2
+
+          phpunit (dropzone 6):
+            extends: phpunit
+            needs:
+              - "composer (dropzone 6)"
+        </code></pre>
+      </section>
+      <section>
+        <h3>Customize: Test Matrix</h3>
+        <p>Redis tests run with redis and relay extension and phpredis</p>
+        <pre><code class="language-yaml" data-trim>
+          phpunit:
+            parallel:
+              matrix:
+                - REDIS_INTERFACE:
+                    - PhpRedis
+                    - Predis
+                    - Relay
+        </code></pre>
       </section>
     </section>
 
