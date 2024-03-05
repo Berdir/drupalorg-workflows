@@ -299,14 +299,20 @@
         <h3>Gitlab CI</h3>
         <ul>
           <li>Standard Continuous Integration system of Gitlab</li>
+          <li><strong>Does not support patches!</strong></li>
           <li>Pipeline: A set of jobs</li>
           <li>Jobs: Set of commands, runs in a container, can use N service containers (MySQL, Redis, ...), dependencies</li>
           <li>Scalable, runs on Kubernetes</li>
-          <li>Infrastructure provided by Drupal Asssociation, pretty expensive, consider what pipelines are really needed</li>
+          <li>Infrastructure provided by Drupal Association, pretty expensive, consider what pipelines are really needed</li>
         </ul>
       </section>
       <section>
-        <p>CORE MR: test only, split</p>
+        <h3>.gitlab-ci.yml</h3>
+        <ul>
+          <li>Configuration is a in in a file in the project</li>
+          <li>For DrupalCI, only maintainers could make test configuration changes, through the drupal.org UI, new branches required new configuration</li>
+          <li>Contributors can make adjustments/recommendations, maintainers can then merge that</li>
+        </ul>
       </section>
       <section>
         <h3>Add and use default template</h3>
@@ -459,6 +465,17 @@
                     - Predis
                     - Relay
         </code></pre>
+      </section>
+      <section>
+        <h3>Gitlab CI in Drupal core</h3>
+        <ul>
+          <li>Extremely high level of parallel execution (12 minutes instead of 1h+ on DrupalCI)</li>
+          <li>Test only job: Attempts to automatically detect changed/new tests and runs only those, expected to fail</li>
+          <li>Pipeline: A set of jobs</li>
+          <li>Jobs: Set of commands, runs in a container, can use N service containers (MySQL, Redis, ...), dependencies</li>
+          <li>Scalable, runs on Kubernetes</li>
+          <li>Infrastructure provided by Drupal Asssociation, pretty expensive, consider what pipelines are really needed</li>
+        </ul>
       </section>
     </section>
 
