@@ -109,7 +109,6 @@
           <li>Development in 11.x branch (=main branch)</li>
           <li>As of a few days ago, 10.3.x now exists as a separate branch</li>
           <li>Almost every issue should still target 11.x, will first be committed there</li>
-          <li></li>
         </ul>
       </section>
       <section>
@@ -178,7 +177,7 @@
       <section>
         <h3>Uncommon aspects on drupal.org</h3>
         <ul>
-          <li>Very common that multiple developers contribute code to a single issue</li>
+          <li>Often multiple developers contribute code to a single issue</li>
           <li>Custom tools like Dreditor</li>
           <li>Same basic workflow persisted for a very long time, while code versioning changed from CVS to Git to Gitlab</li>
           <li>High adoption of using patches in website projects (committed, drush make, composer patches)</li>
@@ -199,14 +198,15 @@
         <ul>
           <li>Merge requests commonly assume a single developer/team</li>
           <li>Non-maintainers initiate process by creating a repository "fork" in their own name.</li>
-          <li>Fork is owned by them, only they are commit</li>
+          <li>Fork is owned by them, only they can commit</li>
         </ul>
       </section>
       <section>
         <h3>Merge requests on drupal.org</h3>
         <ul>
           <li>Custom process developed for drupal.org: shared issue forks</li>
-          <li>First contributor requests an issue fork. Everyone can gain access, automatically granted</li>
+          <li>First contributor requests an issue fork. Everyone can get push access, automatically granted</li>
+          <li>Some restrictions still apply: changing merge request target, resolving review comments</li>
           <li>Gitlab is working on a similar concept called <a href="https://about.gitlab.com/blog/2023/04/04/gitlab-community-forks/">Community forks</a></li>
         </ul>
       </section>
@@ -315,13 +315,16 @@
         </ul>
       </section>
       <section>
+        <h3>Documentation</h3>
+        <p><a href="https://project.pages.drupalcode.org/gitlab_templates/">project.pages.drupalcode.org/gitlab_templates/</a></p>
+      </section>
+      <section>
         <h3>Add and use default template</h3>
-        <img src="images/add-gitlab-ci.png" alt="Screenshot of add .gitlab-ci.yml file UI" >
+          <img src="images/add-gitlab-ci.png" alt="Screenshot of add .gitlab-ci.yml file UI" >
       </section>
       <section>
         <h3>Default pipeline</h3>
         <img src="images/default-pipeline.png" alt="Screenshot of default Pipeline UI" >
-        <p><a href="https://git.drupalcode.org/project/gitlab_templates">https://git.drupalcode.org/project/gitlab_templates</a></p>
       </section>
       <section>
         <h3>Investigate fails: Test results</h3>
@@ -357,12 +360,18 @@
         <p>Alternative #1: Scheduled Pipelines</p>
         <p>Alternative #2: Combine with manual execution</p>
         <pre><code class="language-yaml" data-trim>
-          when: manual
+          phpunit (next major):
+            when: manual
         </code></pre>
       </section>
       <section>
         <h3>Scheduled Pipelines</h3>
         <img src="images/pipeline-schedule.png" alt="Screenshot of Pipeline Schedule Editor">
+      </section>
+      <section>
+        <h3>Intermezzo: Gitlab E-mail & notifications</h3>
+        <p style="float: left; width: 30%"><img src="images/notifications.png" alt="Screenshot of Gitlab Preferences UI"></p>
+        <p style="vertical-align: center; padding-top: 50px">Check your e-mail in the Gitlab notification preferences and adjust notification settings</p>
       </section>
       <section>
         <h3>Customize: Additional services</h3>
@@ -394,22 +403,24 @@
       </section>
       <section>
         <h3>Customize: Additional extensions/packages</h3>
-        <p>Redis needs the redis php extension</p>
-        <pre><code class="language-yaml" data-trim>
-          phpunit:
-            before_script:
-              - pecl install redis && docker-php-ext-enable redis
-        </code></pre>
         <p>Imagemagick needs extra packages</p>
         <pre><code class="language-yaml" data-trim>
             before_script:
               - sudo apt-get update
               - sudo apt-get install -y --no-install-recommends imagemagick
         </code></pre>
+        <p>Redis needs the redis php extension</p>
+        <pre><code class="language-yaml" data-trim>
+          .phpunit-base:
+            before_script:
+              - apt-get update
+              - apt-get install -y --no-install-recommends $PHPIZE_DEPS
+              - pecl install redis && docker-php-ext-enable redis
+        </code></pre>
       </section>
       <section>
         <h3>Customize: Use your own image</h3>
-        <p>Installing many packages and other system changes are slow. A separate image is faster, but needs to be maintained</p>
+        <p>Installing many packages and other system changes can be slow. A separate image is faster, but needs to be maintained</p>
         <pre><code class="language-yaml" data-trim>
           default:
             image:
@@ -471,14 +482,65 @@
         <ul>
           <li>Extremely high level of parallel execution (12 minutes instead of 1h+ on DrupalCI)</li>
           <li>Test only job: Attempts to automatically detect changed/new tests and runs only those, expected to fail</li>
-          <li>Pipeline: A set of jobs</li>
-          <li>Jobs: Set of commands, runs in a container, can use N service containers (MySQL, Redis, ...), dependencies</li>
-          <li>Scalable, runs on Kubernetes</li>
-          <li>Infrastructure provided by Drupal Asssociation, pretty expensive, consider what pipelines are really needed</li>
+          <li>Various manual pipelines to test different PHP versions and database backends</li>
         </ul>
       </section>
     </section>
+  <section>
+    <section><h2 class="r-fit-text">Release management</h2></section>
+    <section>
+      <h3>Branches</h3>
+      <ul>
+        <li>Old branch structure: 8.x-1.x (CORE.x-MAJOR.x)</li>
+        <li>New semver: 1.x or 1.0.x (MAJOR.x, MAJOR.MINOR.x)</li>
+        <li>Recommendation: Use 1.x, allows minor and patch releases: 1.0.0, 1.0.1, 1.1.0, ... from a single branch</li>
+        <li>If necessary, a minor  branch can still be created to e.g. create a 1.0.2 bugfix/patch release</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Release series</h3>
+      <ul>
+        <li>A release series for semver is a a minor release and its patch releases</li>
+        <li>A release series can be supported and optionally recommended (green)</li>
+        <li>A major branch can not be marked as a supported, only shows up on project page once you have a tag</li>
+        <li>Recommendation: keep supported status for a longer period. Worst case scenario: "Having to" release a security fix for old release series.</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Release Series UI</h3>
+      <img src="images/release-series.png" alt="Screenshot of Release Series UI on drupal.org">
+    </section>
+    <section>
+      <h3>Releases on project page</h3>
+      <img src="images/releases.png" alt="Screenshot of Releases UI on drupal.org">
+    </section>
+    <section>
+      <h3>When to release a minor release...</h3>
+      <ul>
+        <li>New features (that may require attention)</li>
+        <li>New/Raising requirements (new min core version, PHP version, other updated/new dependencies)</li>
+        <li>Yes, requiring Drupal 9/Drupal 10 does <strong>not</strong> require a new major version of your module</li>
+      </ul>
+    </section>
+    <section>
+      <h3>When to release a major release...</h3>
+      <ul>
+        <li>BC breaking changes in your own API</li>
+        <li>I recommend doing this rarely: It can take years for a most or even a majority of the installations to switch</li>
+      </ul>
+    </section>
 
+    <section>
+      <h3>Commits & Credits</h3>
+    </section>
+
+    <section>
+      <h3>Creating a release</h3>
+    </section>
+  </section>
+    <section>
+      <section><h2 class="r-fit-text">Questions?</h2></section>
+    </section>
   </div>
 </div>
 
