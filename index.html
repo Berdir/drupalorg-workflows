@@ -177,7 +177,7 @@
       <section>
         <h3>Uncommon aspects on drupal.org</h3>
         <ul>
-          <li>Often multiple developers contribute code to a single issue</li>
+          <li>Often multiple developers contribute code to a single issue (5.6 average contributors per core issue)</li>
           <li>Custom tools like Dreditor</li>
           <li>Same basic workflow persisted for a very long time, while code versioning changed from CVS to Git to Gitlab</li>
           <li>High adoption of using patches in website projects (committed, drush make, composer patches)</li>
@@ -532,10 +532,37 @@
 
     <section>
       <h3>Commits & Credits</h3>
+      <ul>
+        <li>Single commit per issue (and branch)</li>
+        <li><code>Issue #NUMBER by CONTRIBUTORS: DESCRIPTION</code></li>
+        <li>Contributors in commit message is no longer relevant for issue credits on drupal.org</li>
+        <li>Review and adjust suggested issue credits. Consider removing credits for things like uploading patches from MR, screenshots of patch-applying.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Committing a merge request</h3>
+      <ul>
+        <li>Using the dropdown & Merge button on the issue does a squash merge using the given commit message and is the recommended way to merge.</li>
+        <li>Sometimes it fails, second attempt usually works unless the MR really doesn't apply.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Commits & Credits</h3>
+      <img src="images/credits-commit.png" alt="Screenshot of Credits & Commit UI">
     </section>
 
     <section>
       <h3>Creating a release</h3>
+      <ul>
+        <li>Include release notes, mention important changes</li>
+        <li><a href="https://github.com/mglaman/drupalorg-cli">drupalorg mrn</a> by Matt Glaman creates a nice templates with linked issued and contributors</li>
+        <li>Online version: <a href="https://drupal-mrn.dev">drupal-mrn.dev</a></li>
+      </ul>
+    </section>
+    <section>
+        <img src="images/release-notes.png" alt="Screenshot of Paragraph release notes" height="600">
     </section>
   </section>
     <section>
